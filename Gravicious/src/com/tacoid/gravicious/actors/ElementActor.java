@@ -3,7 +3,8 @@ package com.tacoid.gravicious.actors;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.tacoid.gravicious.LevelElement;
+import com.tacoid.gravicious.elements.LevelElement;
+import com.tacoid.gravicious.screens.EditorScreen;
 
 public class ElementActor extends Actor {
 	
@@ -16,7 +17,7 @@ public class ElementActor extends Actor {
         	@Override
         	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
         		if(element.getLevel()!=null) {
-        			element.getLevel().setSelectedElement(element);
+        			EditorScreen.getInstance().setSelectedElement(element);
         		}
         	}
         	@Override

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.tacoid.gravicious.Sun;
+import com.tacoid.gravicious.elements.Sun;
 
 public class SunActor extends ElementActor{
     private Color shapeFillColor = new Color(0.80f, 0.80f, 0.0f, 0.0f);

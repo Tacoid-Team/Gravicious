@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.tacoid.gravicious.Planet;
+import com.tacoid.gravicious.elements.Planet;
 
 public class PlanetActor extends ElementActor {
     private Color shapeFillColor = new Color(0.55f, 0.71f, 0.0f, 0.0f);

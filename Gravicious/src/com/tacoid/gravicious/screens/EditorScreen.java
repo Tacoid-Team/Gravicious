@@ -1,22 +1,23 @@
 package com.tacoid.gravicious.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.tacoid.gravicious.Gravicious;
 import com.tacoid.gravicious.Level;
-import com.tacoid.gravicious.LevelElement;
-import com.tacoid.gravicious.Planet;
-import com.tacoid.gravicious.Sun;
+import com.tacoid.gravicious.elements.LevelElement;
+import com.tacoid.gravicious.elements.Planet;
+import com.tacoid.gravicious.elements.Star;
+import com.tacoid.gravicious.elements.Sun;
 
 
-public class EditorScreen extends GameScreen implements GestureListener{
+public class EditorScreen extends GameScreen {
 	
 	private static EditorScreen instance = null;
 	
@@ -30,6 +31,30 @@ public class EditorScreen extends GameScreen implements GestureListener{
 	}
 	
 	private Level level = null;
+	private LevelElement selectedElement = null;
+	private Selector selector;
+	private Table tableL;
+	
+	private class Selector extends Actor {
+	    private Color shapeFillColor = new Color(1.0f, 0.0f, 0.0f ,1.0f);
+	    public ShapeRenderer shapeRenderer;
+
+	    public Selector() {
+	        shapeRenderer = new ShapeRenderer();
+	    }
+
+	    @Override
+	    public void draw(SpriteBatch batch, float parentAlpha) {
+	    	if(selectedElement!=null) {
+	    		batch.end();
+	    			shapeRenderer.begin(ShapeType.FilledCircle);
+	    				shapeRenderer.setColor(shapeFillColor);
+	    				shapeRenderer.filledCircle(selectedElement.getX(), selectedElement.getY(), 10);
+	    			shapeRenderer.end();
+	    		batch.begin();
+	    	}
+	    }
+	}
 	
 	/* Classe générique de bouton pour créer un nouvel élément de niveau */
 	private class ElementButton extends TextButton{
@@ -59,28 +84,59 @@ public class EditorScreen extends GameScreen implements GestureListener{
 			});
 		}
 	}
+	
+	private class DeleteButton extends TextButton {
+		public DeleteButton() {
+			super("Delete", Gravicious.getInstance().globalSkin);
+			addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					if(selectedElement != null) {
+						level.removeElement(selectedElement);
+						selectedElement = null;
+						selector.setVisible(false);
+					}
+				}
+			});
+		}
+	}
 
 	private EditorScreen() {
 		super();
-		
-		InputMultiplexer im = new InputMultiplexer(new GestureDetector(this), stage);
-		Gdx.input.setInputProcessor(im);
+
 		level = new Level();
-		Table tableL = new Table();
+		
+		tableL = new Table();
 		tableL.setFillParent(true);
 		tableL.left().bottom();
 		tableL.add(new ElementButton(Planet.class));
 		tableL.add(new ElementButton(Sun.class));
+		tableL.add(new ElementButton(Star.class));
+		tableL.add(new DeleteButton());
 		
-		Table tableR = new Table();
-		tableR.setFillParent(true);
-		tableR.right().bottom();
-		tableR.add(new TextButton("+", Gravicious.getInstance().globalSkin));
-		tableR.add(new TextButton("-", Gravicious.getInstance().globalSkin));
+		selector = new Selector();	
+		
+		refreshStage();
+	}
+	
+	void refreshStage() {
+		stage.clear();
 		stage.addActor(level);
+		stage.addActor(selector);
 		stage.addActor(tableL);
-		stage.addActor(tableR);
-		
+		if(selectedElement != null) {
+			if(selectedElement.getWidget() != null) {
+				stage.addActor(selectedElement.getWidget());
+			}
+		}
+	}
+	
+
+	public void setSelectedElement(LevelElement selectedElement) {
+		this.selectedElement = selectedElement;
+		System.out.println("Element " + selectedElement.getName() + " selected.");
+		selector.setVisible(true);
+		refreshStage();
 	}
 
 	@Override
@@ -121,51 +177,6 @@ public class EditorScreen extends GameScreen implements GestureListener{
 	@Override
 	public void renderScreen(float delta) {
 
-	}
-
-	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean tap(float x, float y, int count, int button) {
-		if(count == 2) {
-			level.removeElement(level.getSelectedElement());
-		}
-		return false;
-	}
-
-	@Override
-	public boolean longPress(float x, float y) {
-
-		return false;
-	}
-
-	@Override
-	public boolean fling(float velocityX, float velocityY, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean zoom(float initialDistance, float distance) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
-			Vector2 pointer1, Vector2 pointer2) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

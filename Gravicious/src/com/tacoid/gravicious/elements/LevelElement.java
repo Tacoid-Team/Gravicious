@@ -1,8 +1,10 @@
-package com.tacoid.gravicious;
+package com.tacoid.gravicious.elements;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.tacoid.gravicious.Level;
 
-public class LevelElement {
+public abstract class LevelElement {
 	static private int id = 0;
 	
 	private Actor actor;
@@ -10,10 +12,13 @@ public class LevelElement {
 
 	private Level level;
 	
-	LevelElement(String name) {
+	protected LevelElement(String name) {
 		this.name = name+"_"+id;
 		id++;
 	}
+	
+	public abstract void update(float delta);
+	public abstract Table getWidget();
 
 	public void setActor(Actor a) {
 		actor = a;

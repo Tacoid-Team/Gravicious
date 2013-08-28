@@ -4,7 +4,7 @@ import com.tacoid.gravicious.actors.PlanetActor;
 
 public class Planet extends LevelElement {
 	
-	float radius = 100.0f;
+	private float radius = 100.0f;
 	
 	public Planet() {
 		super("planet");

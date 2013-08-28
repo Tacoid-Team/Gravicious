@@ -36,12 +36,12 @@ public class SunActor extends ElementActor{
     @Override
     public Actor hit(float x, float y, boolean touchable) {
 		if (touchable && this.getTouchable() != Touchable.enabled) return null;
-
-	    double distance = x*x + y*y;
-	    if (distance <= sun.getRadius()*sun.getRadius()){
-	        return this;
-	    } else {
-	    	return null;
-	    }
+		
+		double distance = x*x + y*y;
+		if (distance <= sun.getRadius()*sun.getRadius()){
+		    return this;
+		} else {
+			return null;
+		}
     }
 }

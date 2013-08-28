@@ -19,25 +19,20 @@ public class Level extends Group{
 	private class Selector extends Actor {
 	    private Color shapeFillColor = new Color(1.0f, 0.0f, 0.0f ,1.0f);
 	    public ShapeRenderer shapeRenderer;
-	    private LevelElement e;
 
 	    public Selector() {
 	        shapeRenderer = new ShapeRenderer();
 	    }
-	    
-	    public void setElement(LevelElement e) {
-	    	this.e = e;
-	    }
 
 	    @Override
 	    public void draw(SpriteBatch batch, float parentAlpha) {
-	    	if(e!=null) {
-		    	batch.end();
-			    	shapeRenderer.begin(ShapeType.FilledCircle);
-				    	shapeRenderer.setColor(shapeFillColor);
-				    	shapeRenderer.filledCircle(e.getX(), e.getY(), 10);
-				    shapeRenderer.end();
-			    batch.begin();
+	    	if(selectedElement!=null) {
+	    		batch.end();
+	    			shapeRenderer.begin(ShapeType.FilledCircle);
+	    				shapeRenderer.setColor(shapeFillColor);
+	    				shapeRenderer.filledCircle(selectedElement.getX(), selectedElement.getY(), 10);
+	    			shapeRenderer.end();
+	    		batch.begin();
 	    	}
 	    }
 	}
@@ -61,8 +56,8 @@ public class Level extends Group{
 			element.setLevel(null);
 			elements.remove(element.getName());
 			
-			/* On part du principe que l'élément qu'on supprime est très certainement celui selectionné, si c'est pas vrai ben... tant pis :D */
-			selector.setElement(null);
+			/* On part du principe que l'element qu'on supprime est tres certainement celui selectionne, si c'est pas vrai ben... tant pis :D */
+			selectedElement = null;
 			selector.setVisible(false);
 			System.out.println("Element " + element.getName() + " removed.");
 			refreshGroup();
@@ -85,8 +80,6 @@ public class Level extends Group{
 		this.selectedElement = selectedElement;
 		System.out.println("Element " + selectedElement.getName() + " selected.");
 		selector.setVisible(true);
-		selector.setElement(selectedElement);
-		
 	}
 
 }

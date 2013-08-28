@@ -34,21 +34,21 @@ public class EditorScreen extends GameScreen implements GestureListener{
 	/* Classe générique de bouton pour créer un nouvel élément de niveau */
 	private class ElementButton extends TextButton{
 		
-		final Class<? extends LevelElement> cl;
+		final Class<? extends LevelElement> spawned_class;
 
 		public ElementButton(Class <? extends LevelElement> c) {
 			super(c.getName().substring(c.getName().lastIndexOf('.')+1), Gravicious.getInstance().globalSkin);
 			
-			this.cl = c;
+			this.spawned_class = c;
 			
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					
-					LevelElement e;
+					LevelElement element;
 					try {
-						e = cl.newInstance();
-						level.addElement(e);
+						element = spawned_class.newInstance();
+						level.addElement(element);
 					} catch (InstantiationException e1) {
 						e1.printStackTrace();
 					} catch (IllegalAccessException e1) {

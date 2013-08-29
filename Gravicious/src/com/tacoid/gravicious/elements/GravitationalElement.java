@@ -91,7 +91,9 @@ public abstract class GravitationalElement extends LevelElement {
 	
 	private void setRadius(float radius) {
 		if (radius > 0.0f)
-			this.radius = radius;  
+			this.radius = radius;
+		if(actor!=null)
+			actor.updateBody();
 	}
 	
 	public float getRadius() {

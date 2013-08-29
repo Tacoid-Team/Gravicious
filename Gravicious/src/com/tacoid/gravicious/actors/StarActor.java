@@ -54,4 +54,10 @@ public class StarActor extends ElementActor {
 		
 	}
 
+	@Override
+	public void updateBody() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

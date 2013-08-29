@@ -12,6 +12,7 @@ public abstract class ElementActor extends Actor {
 	protected LevelElement element;
 	
 	abstract public void createBody(World world);
+	abstract public void updateBody();
 	
 	public ElementActor(final LevelElement element) {
 		

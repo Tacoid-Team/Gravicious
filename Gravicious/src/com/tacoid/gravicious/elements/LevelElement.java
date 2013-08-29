@@ -8,7 +8,7 @@ import com.tacoid.gravicious.actors.ElementActor;
 public abstract class LevelElement {
 	static private int id = 0;
 	
-	private ElementActor actor;
+	protected ElementActor actor;
 	private String name;
 
 	private Level level;

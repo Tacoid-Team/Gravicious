@@ -22,8 +22,8 @@ public class PlanetActor extends ElementActor {
     public Rectangle area;
     public ShapeRenderer shapeRenderer;
     public Planet planet;
-    public BodyDef bodyDef;
-    public Body body;
+    private BodyDef bodyDef;
+    private Body body;
 
     public PlanetActor(Planet p) {
     	super(p);
@@ -71,7 +71,7 @@ public class PlanetActor extends ElementActor {
 	@Override
 	public void createBody(World world) {
     	body = this.planet.getLevel().getWorld().createBody(bodyDef);  
-        CircleShape dynamicCircle = new CircleShape();  
+    	CircleShape dynamicCircle = new CircleShape();  
         dynamicCircle.setRadius(this.planet.getRadius());  
         FixtureDef fixtureDef = new FixtureDef();  
         fixtureDef.shape = dynamicCircle;  
@@ -98,5 +98,17 @@ public class PlanetActor extends ElementActor {
 		if(body != null) {
 			body.setTransform(new Vector2(getX(), getY()), 0.0f);
 		}
+	}
+
+	@Override
+	public void updateBody() {
+        CircleShape dynamicCircle = new CircleShape();  
+        dynamicCircle.setRadius(this.planet.getRadius());  
+        FixtureDef fixtureDef = new FixtureDef();  
+        fixtureDef.shape = dynamicCircle;  
+        fixtureDef.density = 1.0f;  
+        fixtureDef.friction = 0.0f;  
+        fixtureDef.restitution = 1;  
+        body.createFixture(fixtureDef);
 	}
 }

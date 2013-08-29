@@ -56,4 +56,10 @@ public class SunActor extends ElementActor{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updateBody() {
+		// TODO Auto-generated method stub
+		
+	}
 }

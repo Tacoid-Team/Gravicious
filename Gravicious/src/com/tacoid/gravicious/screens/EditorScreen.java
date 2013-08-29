@@ -1,5 +1,6 @@
 package com.tacoid.gravicious.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -33,7 +34,8 @@ public class EditorScreen extends GameScreen {
 	private Level level = null;
 	private LevelElement selectedElement = null;
 	private Selector selector;
-	private Table tableL;
+	private Table tableBL;
+	private Table tableTL;
 	
 	private class Selector extends Actor {
 	    private Color shapeFillColor = new Color(1.0f, 0.0f, 0.0f ,1.0f);
@@ -100,19 +102,39 @@ public class EditorScreen extends GameScreen {
 			});
 		}
 	}
+	
+	private class TestButton extends TextButton {
+		public TestButton() {
+			super("Test", Gravicious.getInstance().globalSkin);
+			addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					PlayScreen screen = PlayScreen.getInstance();
+					screen.init();
+					screen.setLevel(level);
+					Gravicious.getInstance().setScreen(screen);
+				}
+			});
+		}
+	}
 
 	private EditorScreen() {
 		super();
 
 		level = new Level();
 		
-		tableL = new Table();
-		tableL.setFillParent(true);
-		tableL.left().bottom();
-		tableL.add(new ElementButton(Planet.class));
-		tableL.add(new ElementButton(Sun.class));
-		tableL.add(new ElementButton(Star.class));
-		tableL.add(new DeleteButton());
+		tableBL = new Table();
+		tableBL.setFillParent(true);
+		tableBL.left().bottom();
+		tableBL.add(new ElementButton(Planet.class));
+		tableBL.add(new ElementButton(Sun.class));
+		tableBL.add(new ElementButton(Star.class));
+		tableBL.add(new DeleteButton());
+		
+		tableTL = new Table();
+		tableTL.setFillParent(true);
+		tableTL.left().top();
+		tableTL.add(new TestButton());
 		
 		selector = new Selector();	
 		
@@ -123,7 +145,8 @@ public class EditorScreen extends GameScreen {
 		stage.clear();
 		stage.addActor(level);
 		stage.addActor(selector);
-		stage.addActor(tableL);
+		stage.addActor(tableBL);
+		stage.addActor(tableTL);
 		if(selectedElement != null) {
 			if(selectedElement.getWidget() != null) {
 				stage.addActor(selectedElement.getWidget());
@@ -131,7 +154,6 @@ public class EditorScreen extends GameScreen {
 		}
 	}
 	
-
 	public void setSelectedElement(LevelElement selectedElement) {
 		this.selectedElement = selectedElement;
 		System.out.println("Element " + selectedElement.getName() + " selected.");
@@ -170,13 +192,22 @@ public class EditorScreen extends GameScreen {
 
 	@Override
 	public void init() {
-		
-		
+		Gdx.input.setInputProcessor(stage);
+		refreshStage();
 	}
 
 	@Override
 	public void renderScreen(float delta) {
 
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	@Override
+	public boolean isEditor() {
+		return true;
 	}
 
 }

@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.tacoid.gravicious.Gravicious;
 import com.tacoid.gravicious.elements.Star;
+import com.tacoid.gravicious.screens.GameScreen;
 
 public class StarActor extends ElementActor {
 
@@ -32,6 +34,9 @@ public class StarActor extends ElementActor {
     
     @Override
     public Actor hit(float x, float y, boolean touchable) {
+    	GameScreen screen = (GameScreen)Gravicious.getInstance().getScreen();
+    	
+    	if(!screen.isEditor()) return null;
 		if (touchable && this.getTouchable() != Touchable.enabled) return null;
 		
 		double distance = x*x + y*y;

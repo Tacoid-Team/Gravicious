@@ -1,15 +1,19 @@
 package com.tacoid.gravicious.elements;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.tacoid.gravicious.Gravicious;
 
 public abstract class GravitationalElement extends LevelElement {
 
+	float gravity = 10.0f;
 	float radius = 100.0f;
-	float force;
 	
 	Table table;
 	
@@ -21,24 +25,86 @@ public abstract class GravitationalElement extends LevelElement {
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					radius+=increment;
+					setRadius(getRadius()+increment);
 				}
 			});
 		}
-		
 	}
 
+	private class RadiusSlider extends Slider {
+		public RadiusSlider(float min, float max) {
+			super(min, max, 1.0f, false, Gravicious.getInstance().globalSkin);
+			addListener(new ChangeListener() {
+				@Override
+				public void changed (ChangeEvent event, Actor actor){
+					setRadius(((Slider)actor).getValue());
+				}
+			});
+		}
+	}
+
+	private class GravityButton extends TextButton {
+		private float increment;
+		public GravityButton(float inc, String string) {
+			super(string, Gravicious.getInstance().globalSkin);
+			this.increment = inc;
+			addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					setGravity(getGravity()+increment);
+				}
+			});
+		}
+	}
+
+	private class GravitySlider extends Slider {
+		public GravitySlider(float min, float max) {
+			super(min, max, 1.0f, false, Gravicious.getInstance().globalSkin);
+			addListener(new ChangeListener() {
+				@Override
+				public void changed (ChangeEvent event, Actor actor){
+					setGravity(((Slider)actor).getValue());
+				}
+			});
+		}
+	}
 	protected GravitationalElement(String name) {
 		super(name);
 		table = new Table();
 		table.setFillParent(true);
 		table.right().bottom();
-		table.add(new RadiusButton(10, "+"));
-		table.add(new RadiusButton(-10, "-"));
+		table.add(new Label("radius", Gravicious.getInstance().globalSkin));
+		RadiusSlider radius_slider = new RadiusSlider(1, 500);
+		radius_slider.setValue(getRadius());
+		table.add(radius_slider);
+		table.add(new RadiusButton(-2, "-"));
+		table.add(new RadiusButton(2, "+"));
+		table.row();
+		table.add(new Label("gravity", Gravicious.getInstance().globalSkin));
+		GravitySlider gravity_slider = new GravitySlider(1, 50);
+		gravity_slider.setValue(getGravity());
+		table.add(gravity_slider);
+		table.add(new GravityButton(-2, "-"));
+		table.add(new GravityButton(2, "+"));
+		
+	}
+	
+	private void setRadius(float radius) {
+		if (radius > 0.0f)
+			this.radius = radius;  
 	}
 	
 	public float getRadius() {
 		return radius;
+	}
+	
+	private void setGravity(float gravity) {
+		if (gravity > 0.0f)
+			this.gravity = gravity;  
+	}
+	
+	public float getGravity() {
+		return gravity;
 	}
 
 	@Override

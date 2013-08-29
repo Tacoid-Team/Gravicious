@@ -19,7 +19,6 @@ import com.tacoid.gravicious.elements.Planet;
 import com.tacoid.gravicious.screens.GameScreen;
 
 public class PlanetActor extends ElementActor {
-    private Color shapeFillColor = new Color(0.55f, 0.71f, 0.0f, 0.0f);
     public Rectangle area;
     public ShapeRenderer shapeRenderer;
     public Planet planet;
@@ -37,11 +36,18 @@ public class PlanetActor extends ElementActor {
     	bodyDef.position.set(getX(), getY());
     }
 
+    private Color getColorFromGravity() {
+    	float scale = planet.getGravity() / 50.0f;
+    	float r = 0.25f + 0.05f * scale;
+    	float g = 0.61f - 0.30f * scale;
+    	return new Color(r, g, 0.0f, 0.0f);
+    }
+    
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
     	batch.end();
 	    	shapeRenderer.begin(ShapeType.FilledCircle);
-		    	shapeRenderer.setColor(shapeFillColor);
+		    	shapeRenderer.setColor(getColorFromGravity());
 		    	shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius());
 		    shapeRenderer.end();
 	    batch.begin();

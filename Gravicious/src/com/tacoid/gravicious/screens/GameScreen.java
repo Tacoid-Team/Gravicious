@@ -23,6 +23,7 @@ public abstract class GameScreen implements Screen {
 
 	public abstract void init();
 	public abstract void renderScreen(float delta);
+	public abstract boolean isEditor();
 
 	@Override
 	public void render(float delta) {
@@ -34,7 +35,7 @@ public abstract class GameScreen implements Screen {
 		GLCommon gl = Gdx.gl;
 		
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+		Gdx.gl.glClearColor(0.4f, 0.4f, 0.8f, 1);
 
 		stage.act(delta);
 		stage.draw();

@@ -1,16 +1,20 @@
 package com.tacoid.gravicious.actors;
 
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.tacoid.gravicious.elements.LevelElement;
 import com.tacoid.gravicious.screens.EditorScreen;
 
-public class ElementActor extends Actor {
+public abstract class ElementActor extends Actor {
 	
 	protected LevelElement element;
 	
+	abstract public void createBody(World world);
+	
 	public ElementActor(final LevelElement element) {
+		
         this.addListener(new ClickListener() {
         	float xoff;
         	float yoff;

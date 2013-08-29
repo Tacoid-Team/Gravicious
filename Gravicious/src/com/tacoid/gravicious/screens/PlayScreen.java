@@ -1,6 +1,7 @@
 package com.tacoid.gravicious.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -39,8 +40,10 @@ public class PlayScreen extends GameScreen {
 	
 	private GameMechanics game;
 	private Table tableTL;
+	private Box2DDebugRenderer debugRenderer;
 	
 	PlayScreen() {
+		debugRenderer = new Box2DDebugRenderer();
 		game = new GameMechanics();
 		tableTL = new Table();
 		tableTL.setFillParent(true);
@@ -97,7 +100,8 @@ public class PlayScreen extends GameScreen {
 
 	@Override
 	public void renderScreen(float delta) {
-		// TODO Auto-generated method stub
+		game.update(delta);
+		debugRenderer.render(game.getLevel().getWorld(), stage.getCamera().combined);
 
 	}
 
@@ -105,5 +109,4 @@ public class PlayScreen extends GameScreen {
 	public boolean isEditor() {
 		return false;
 	}
-
 }

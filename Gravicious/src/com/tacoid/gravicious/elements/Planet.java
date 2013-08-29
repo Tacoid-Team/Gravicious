@@ -1,5 +1,6 @@
 package com.tacoid.gravicious.elements;
 
+import com.tacoid.gravicious.Level;
 import com.tacoid.gravicious.actors.PlanetActor;
 
 public class Planet extends GravitationalElement {

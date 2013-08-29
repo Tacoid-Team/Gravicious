@@ -3,16 +3,19 @@ package com.tacoid.gravicious;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.tacoid.gravicious.elements.LevelElement;
 
 public class Level extends Group{
-	public Map<String, LevelElement> elements;
-	
-	public LevelElement selectedElement; /* Editor feature */
+	private Map<String, LevelElement> elements;
+
+	private World world;
 
 	public Level() {
 		elements = new HashMap<String, LevelElement>();
+		world = new World(new Vector2(0f,-100f), false);
 	}
 
 	public void addElement(LevelElement element) {
@@ -42,5 +45,9 @@ public class Level extends Group{
 		for(LevelElement e : elements.values()) {
 			this.addActor(e.getActor());
 		}	
+	}
+
+	public World getWorld() {
+		return world;
 	}
 }

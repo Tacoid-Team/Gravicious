@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.tacoid.gravicious.Gravicious;
@@ -46,5 +47,11 @@ public class StarActor extends ElementActor {
 			return null;
 		}
     }
+
+	@Override
+	public void createBody(World world) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -3,11 +3,12 @@ package com.tacoid.gravicious.elements;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.tacoid.gravicious.Level;
+import com.tacoid.gravicious.actors.ElementActor;
 
 public abstract class LevelElement {
 	static private int id = 0;
 	
-	private Actor actor;
+	private ElementActor actor;
 	private String name;
 
 	private Level level;
@@ -20,11 +21,11 @@ public abstract class LevelElement {
 	public abstract void update(float delta);
 	public abstract Table getWidget();
 
-	public void setActor(Actor a) {
+	public void setActor(ElementActor a) {
 		actor = a;
 	}
 	
-	public Actor getActor() {
+	public ElementActor getActor() {
 		return actor;
 	}
 	
@@ -42,6 +43,7 @@ public abstract class LevelElement {
 	
 	public void setLevel(Level level) {
 		this.level = level;
+		actor.createBody(level.getWorld());
 	}
 	
 	public Level getLevel() {

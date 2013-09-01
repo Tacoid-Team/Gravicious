@@ -25,6 +25,7 @@ public class StarActor extends ElementActor {
 	
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
+    	shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     	batch.end();
 	    	shapeRenderer.begin(ShapeType.FilledRectangle);
 		    	shapeRenderer.setColor(shapeFillColor);

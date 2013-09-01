@@ -45,6 +45,7 @@ public class PlanetActor extends ElementActor {
     
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
+    	shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     	batch.end();
 	    	shapeRenderer.begin(ShapeType.FilledCircle);
 		    	shapeRenderer.setColor(getColorFromGravity());

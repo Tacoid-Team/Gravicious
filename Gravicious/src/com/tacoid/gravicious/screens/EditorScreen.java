@@ -20,60 +20,60 @@ import com.tacoid.gravicious.elements.Sun;
 
 
 public class EditorScreen extends GameScreen {
-	
+
 	private static EditorScreen instance = null;
-	 Box2DDebugRenderer debugRenderer;  
-	
+	Box2DDebugRenderer debugRenderer;  
+
 	public static EditorScreen getInstance() {
-		
+
 		if(instance == null) {
 			instance = new EditorScreen();
 		}
-		
+
 		return instance;
 	}
-	
+
 	private Level level = null;
 	private LevelElement selectedElement = null;
 	private Selector selector;
 	private Table tableBL;
 	private Table tableTL;
-	
+
 	private class Selector extends Actor {
-	    private Color shapeFillColor = new Color(1.0f, 0.0f, 0.0f ,1.0f);
-	    public ShapeRenderer shapeRenderer;
+		private Color shapeFillColor = new Color(1.0f, 0.0f, 0.0f ,1.0f);
+		public ShapeRenderer shapeRenderer;
 
-	    public Selector() {
-	        shapeRenderer = new ShapeRenderer();
-	    }
+		public Selector() {
+			shapeRenderer = new ShapeRenderer();
+		}
 
-	    @Override
-	    public void draw(SpriteBatch batch, float parentAlpha) {
-	    	if(selectedElement!=null) {
-	    		batch.end();
-	    			shapeRenderer.begin(ShapeType.FilledCircle);
-	    				shapeRenderer.setColor(shapeFillColor);
-	    				shapeRenderer.filledCircle(selectedElement.getX(), selectedElement.getY(), 10);
-	    			shapeRenderer.end();
-	    		batch.begin();
-	    	}
-	    }
+		@Override
+		public void draw(SpriteBatch batch, float parentAlpha) {
+			if(selectedElement!=null) {
+				batch.end();
+				shapeRenderer.begin(ShapeType.FilledCircle);
+				shapeRenderer.setColor(shapeFillColor);
+				shapeRenderer.filledCircle(selectedElement.getX(), selectedElement.getY(), 10);
+				shapeRenderer.end();
+				batch.begin();
+			}
+		}
 	}
-	
-	/* Classe générique de bouton pour créer un nouvel élément de niveau */
+
+	/* Classe gï¿½nï¿½rique de bouton pour crï¿½er un nouvel ï¿½lï¿½ment de niveau */
 	private class ElementButton extends TextButton{
-		
+
 		final Class<? extends LevelElement> spawned_class;
 
 		public ElementButton(Class <? extends LevelElement> c) {
 			super(c.getName().substring(c.getName().lastIndexOf('.')+1), Gravicious.getInstance().globalSkin);
-			
+
 			this.spawned_class = c;
-			
+
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					
+
 					LevelElement element;
 					try {
 						element = spawned_class.newInstance();
@@ -83,12 +83,12 @@ public class EditorScreen extends GameScreen {
 					} catch (IllegalAccessException e1) {
 						e1.printStackTrace();
 					}
-					
+
 				}
 			});
 		}
 	}
-	
+
 	private class DeleteButton extends TextButton {
 		public DeleteButton() {
 			super("Delete", Gravicious.getInstance().globalSkin);
@@ -104,7 +104,7 @@ public class EditorScreen extends GameScreen {
 			});
 		}
 	}
-	
+
 	private class TestButton extends TextButton {
 		public TestButton() {
 			super("Test", Gravicious.getInstance().globalSkin);
@@ -124,7 +124,7 @@ public class EditorScreen extends GameScreen {
 		super();
 
 		level = new Level();
-		
+
 		tableBL = new Table();
 		tableBL.setFillParent(true);
 		tableBL.left().bottom();
@@ -132,19 +132,19 @@ public class EditorScreen extends GameScreen {
 		tableBL.add(new ElementButton(Sun.class));
 		tableBL.add(new ElementButton(Star.class));
 		tableBL.add(new DeleteButton());
-		
+
 		tableTL = new Table();
 		tableTL.setFillParent(true);
 		tableTL.left().top();
 		tableTL.add(new TestButton());
-		
+
 		selector = new Selector();	
-		
+
 		debugRenderer = new Box2DDebugRenderer();
-		
+
 		refreshStage();
 	}
-	
+
 	void refreshStage() {
 		stage.clear();
 		stage.addActor(level);
@@ -157,7 +157,7 @@ public class EditorScreen extends GameScreen {
 			}
 		}
 	}
-	
+
 	public void setSelectedElement(LevelElement selectedElement) {
 		this.selectedElement = selectedElement;
 		System.out.println("Element " + selectedElement.getName() + " selected.");
@@ -202,11 +202,11 @@ public class EditorScreen extends GameScreen {
 
 	@Override
 	public void renderScreen(float delta) {
-	     final float BOX_STEP=1/60f;  
-	      final int BOX_VELOCITY_ITERATIONS=6;  
-	      final int BOX_POSITION_ITERATIONS=2;  
-	      final float WORLD_TO_BOX=0.01f;  
-	      final float BOX_WORLD_TO=100f; 
+		final float BOX_STEP=1/60f;  
+		final int BOX_VELOCITY_ITERATIONS=6;  
+		final int BOX_POSITION_ITERATIONS=2;  
+		final float WORLD_TO_BOX=0.01f;  
+		final float BOX_WORLD_TO=100f; 
 		debugRenderer.render(level.getWorld(), stage.getCamera().combined);
 		level.getWorld().step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
 	}

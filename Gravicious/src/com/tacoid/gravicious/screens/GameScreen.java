@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
 public abstract class GameScreen implements Screen {
-	
+
 	protected final int VIRTUAL_WIDTH = 1280;
 	protected final int VIRTUAL_HEIGHT = 768;
 	protected Stage stage;
-	
+
 	protected GameScreen() {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
 				false);
@@ -30,17 +30,17 @@ public abstract class GameScreen implements Screen {
 		renderScreen(delta);
 		draw(delta);
 	}
-	
+
 	private void draw(float delta) {
 		GLCommon gl = Gdx.gl;
-		
+
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.4f, 0.4f, 0.8f, 1);
 
 		stage.act(delta);
 		stage.draw();
 	}
-	
+
 	@Override
 	public void resize(int arg0, int arg1) {
 		stage.setViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false);

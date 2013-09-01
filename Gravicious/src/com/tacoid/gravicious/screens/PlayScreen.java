@@ -11,18 +11,18 @@ import com.tacoid.gravicious.Gravicious;
 import com.tacoid.gravicious.Level;
 
 public class PlayScreen extends GameScreen {
-	
+
 	private static PlayScreen instance = null;
-	
+
 	public static PlayScreen getInstance() {
-		
+
 		if(instance == null) {
 			instance = new PlayScreen();
 		}
-		
+
 		return instance;
 	}
-	
+
 	private class EditorButton extends TextButton {
 		public EditorButton() {
 			super("Editor", Gravicious.getInstance().globalSkin);
@@ -37,11 +37,11 @@ public class PlayScreen extends GameScreen {
 			});
 		}
 	}
-	
+
 	private GameMechanics game;
 	private Table tableTL;
 	private Box2DDebugRenderer debugRenderer;
-	
+
 	PlayScreen() {
 		debugRenderer = new Box2DDebugRenderer();
 		game = new GameMechanics();
@@ -50,12 +50,12 @@ public class PlayScreen extends GameScreen {
 		tableTL.left().top();
 		tableTL.add(new EditorButton());
 	}
-	
+
 	public void setLevel(Level level) {
 		game.init(level);
 		refreshStage();
 	}
-	
+
 	private void refreshStage() {
 		stage.clear();
 		stage.addActor(game.getLevel());
@@ -102,7 +102,6 @@ public class PlayScreen extends GameScreen {
 	public void renderScreen(float delta) {
 		game.update(delta);
 		debugRenderer.render(game.getLevel().getWorld(), stage.getCamera().combined);
-
 	}
 
 	@Override

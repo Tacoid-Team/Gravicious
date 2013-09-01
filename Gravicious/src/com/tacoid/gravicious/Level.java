@@ -24,7 +24,7 @@ public class Level extends Group{
 		System.out.println("Element " + element.getName() + " added.");
 		refreshGroup();
 	}
-	
+
 	public void removeElement(LevelElement element) {
 		if(element != null) {
 			element.setLevel(null);
@@ -33,13 +33,13 @@ public class Level extends Group{
 			refreshGroup();
 		}
 	}
-	
+
 	public void update(float delta) {
 		for(LevelElement e : elements.values()) {
 			e.update(delta);
 		}
 	}
-	
+
 	public void refreshGroup() {
 		this.clear();
 		for(LevelElement e : elements.values()) {

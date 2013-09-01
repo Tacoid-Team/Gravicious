@@ -14,9 +14,9 @@ public abstract class GravitationalElement extends LevelElement {
 
 	float gravity = 10.0f;
 	float radius = 100.0f;
-	
+
 	Table table;
-	
+
 	private class RadiusButton extends TextButton {
 		private float increment;
 		public RadiusButton(float inc, String string) {
@@ -86,25 +86,25 @@ public abstract class GravitationalElement extends LevelElement {
 		table.add(gravity_slider);
 		table.add(new GravityButton(-2, "-"));
 		table.add(new GravityButton(2, "+"));
-		
+
 	}
-	
+
 	private void setRadius(float radius) {
 		if (radius > 0.0f)
 			this.radius = radius;
 		if(actor!=null)
 			actor.updateBody();
 	}
-	
+
 	public float getRadius() {
 		return radius;
 	}
-	
+
 	private void setGravity(float gravity) {
 		if (gravity > 0.0f)
 			this.gravity = gravity;  
 	}
-	
+
 	public float getGravity() {
 		return gravity;
 	}

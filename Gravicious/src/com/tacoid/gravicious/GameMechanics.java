@@ -9,31 +9,29 @@ import com.tacoid.gravicious.elements.GravitationalElement;
 import com.tacoid.gravicious.elements.Planet;
 
 public class GameMechanics implements ContactListener{
-	
+
 	public enum GameState {
 		IDLE,
 		PAUSED,
 		RUNNING
-	};
-	
+	}
+
 	public enum PlayerState {
 		WALKING,
 		FLYING
 	}
-	
+
 	private Level level;
 	private Player player;
-	
+
 	private GameState gameState;
 	private PlayerState playerState;
 	private GravitationalElement walkedElement;
-	
+
 	public GameMechanics() {
-		
 		gameState = GameState.IDLE;
-		
 	}
-	
+
 	public void init(Level level) {
 		this.level = level;
 		player = new Player(level.getWorld());
@@ -43,35 +41,34 @@ public class GameMechanics implements ContactListener{
 		playerState = PlayerState.FLYING;
 		level.getWorld().setContactListener(this);
 	}
-	
+
 	public void start() {
 		gameState = GameState.RUNNING;
 	}
-	
+
 	public void update(float delta) {
-		
 		if(gameState == GameState.RUNNING) {
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
 				level.getWorld().step(delta, 4, 4);
 			} else {
-				
+
 			}
 		}
 	}
-	
+
 	public void jump() {
-		
+
 	}
-	
+
 	public void setLevel(Level level) {
 		this.level = level;
 	}
-	
+
 	public Level getLevel() {
 		return level;
 	}
-	
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -90,7 +87,7 @@ public class GameMechanics implements ContactListener{
 			} else {
 				planet = (Planet) bodyB.getUserData();
 			}
-			
+
 			playerState = PlayerState.WALKING;
 			walkedElement = planet;
 		}
@@ -99,19 +96,19 @@ public class GameMechanics implements ContactListener{
 	@Override
 	public void endContact(Contact contact) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

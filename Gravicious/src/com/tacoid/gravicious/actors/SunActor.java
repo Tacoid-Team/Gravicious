@@ -13,54 +13,54 @@ import com.tacoid.gravicious.elements.Sun;
 import com.tacoid.gravicious.screens.GameScreen;
 
 public class SunActor extends ElementActor{
-    private Color shapeFillColor = new Color(0.80f, 0.80f, 0.0f, 0.0f);
-    public Rectangle area;
-    public ShapeRenderer shapeRenderer;
-    public Sun sun;
+	private Color shapeFillColor = new Color(0.80f, 0.80f, 0.0f, 0.0f);
+	public Rectangle area;
+	public ShapeRenderer shapeRenderer;
+	public Sun sun;
 
-    public SunActor(Sun s) {
-    	super(s);
-        shapeRenderer = new ShapeRenderer();
-        sun = s;
-        setX(100);
-        setY(100);
-    }
+	public SunActor(Sun s) {
+		super(s);
+		shapeRenderer = new ShapeRenderer();
+		sun = s;
+		setX(100);
+		setY(100);
+	}
 
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-    	shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
-    	batch.end();
-	    	shapeRenderer.begin(ShapeType.FilledCircle);
-		    	shapeRenderer.setColor(shapeFillColor);
-		    	shapeRenderer.filledCircle(this.getX(), this.getY(), sun.getRadius());
-		    shapeRenderer.end();
-	    batch.begin();
-    }
-    
-    @Override
-    public Actor hit(float x, float y, boolean touchable) {
-    	GameScreen screen = (GameScreen)Gravicious.getInstance().getScreen();
-    	
-    	if(!screen.isEditor()) return null;
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
+		batch.end();
+			shapeRenderer.begin(ShapeType.FilledCircle);
+				shapeRenderer.setColor(shapeFillColor);
+				shapeRenderer.filledCircle(this.getX(), this.getY(), sun.getRadius());
+			shapeRenderer.end();
+		batch.begin();
+	}
+
+	@Override
+	public Actor hit(float x, float y, boolean touchable) {
+		GameScreen screen = (GameScreen)Gravicious.getInstance().getScreen();
+
+		if(!screen.isEditor()) return null;
 		if (touchable && this.getTouchable() != Touchable.enabled) return null;
-		
+
 		double distance = x*x + y*y;
 		if (distance <= sun.getRadius()*sun.getRadius()){
-		    return this;
+			return this;
 		} else {
 			return null;
 		}
-    }
+	}
 
 	@Override
 	public void createBody(World world) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void updateBody() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -20,32 +20,32 @@ public class Player extends Actor {
 	public Player(World world) {
 		shapeRenderer = new ShapeRenderer();
 		BodyDef bodyDef = new BodyDef();  
-        bodyDef.type = BodyType.DynamicBody;  
-        bodyDef.position.set(100,600);  
-        body = world.createBody(bodyDef);  
-        CircleShape dynamicCircle = new CircleShape();
-        body.setUserData(this);
-        dynamicCircle.setRadius(20f);  
-        FixtureDef fixtureDef = new FixtureDef();  
-        fixtureDef.shape = dynamicCircle;  
-        fixtureDef.density = 1.0f;  
-        fixtureDef.friction = 0.0f;  
-        fixtureDef.restitution = 1;  
-        body.createFixture(fixtureDef); 
-        body.setUserData(this);
+		bodyDef.type = BodyType.DynamicBody;  
+		bodyDef.position.set(100,600);  
+		body = world.createBody(bodyDef);  
+		CircleShape dynamicCircle = new CircleShape();
+		body.setUserData(this);
+		dynamicCircle.setRadius(20f);  
+		FixtureDef fixtureDef = new FixtureDef();  
+		fixtureDef.shape = dynamicCircle;  
+		fixtureDef.density = 1.0f;  
+		fixtureDef.friction = 0.0f;  
+		fixtureDef.restitution = 1;  
+		body.createFixture(fixtureDef); 
+		body.setUserData(this);
 	}
-	
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-    	batch.end();
-	    	shapeRenderer.begin(ShapeType.FilledCircle);
-		    	shapeRenderer.setColor(shapeFillColor);
-		    	shapeRenderer.filledCircle(this.getX(), this.getY(), 20);
-		    shapeRenderer.end();
-	    batch.begin();
-    }
-    
-    @Override
+
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		batch.end();
+			shapeRenderer.begin(ShapeType.FilledCircle);
+			shapeRenderer.setColor(shapeFillColor);
+			shapeRenderer.filledCircle(this.getX(), this.getY(), 20);
+			shapeRenderer.end();
+		batch.begin();
+	}
+
+	@Override
 	public float getX() {
 		return body.getPosition().x;
 	}
@@ -54,6 +54,4 @@ public class Player extends Actor {
 	public float getY() {
 		return body.getPosition().y;
 	}
-
-	
 }

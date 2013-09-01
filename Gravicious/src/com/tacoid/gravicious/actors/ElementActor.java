@@ -21,9 +21,7 @@ public abstract class ElementActor extends Actor {
         	float yoff;
         	@Override
         	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        		if(element.getLevel()!=null) {
-        			EditorScreen.getInstance().setSelectedElement(element);
-        		}
+
         	}
         	@Override
         	public boolean touchDown(InputEvent event, float x, float y,
@@ -31,6 +29,10 @@ public abstract class ElementActor extends Actor {
         		xoff = x;
         		yoff = y;
 
+        		if(element.getLevel()!=null) {
+        			EditorScreen.getInstance().setSelectedElement(element);
+        		}
+        		
         		return true;
         	}
         	

@@ -1,5 +1,6 @@
 package com.tacoid.gravicious;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class Level extends Group{
 
 	public Level() {
 		elements = new HashMap<String, LevelElement>();
-		world = new World(new Vector2(0f,-100f), false);
+		world = new World(new Vector2(0f,0f), false);
 	}
 
 	public void addElement(LevelElement element) {
@@ -49,5 +50,9 @@ public class Level extends Group{
 
 	public World getWorld() {
 		return world;
+	}
+	
+	public Collection<LevelElement> getLevelElements() {
+		return elements.values();
 	}
 }

@@ -37,6 +37,7 @@ public class Player extends Actor {
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
+		shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 		batch.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			shapeRenderer.setColor(shapeFillColor);
@@ -53,5 +54,9 @@ public class Player extends Actor {
 	@Override
 	public float getY() {
 		return body.getPosition().y;
+	}
+	
+	public Body getBody() {
+		return body;
 	}
 }

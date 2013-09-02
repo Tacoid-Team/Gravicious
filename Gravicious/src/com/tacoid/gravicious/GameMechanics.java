@@ -1,11 +1,14 @@
 package com.tacoid.gravicious;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.tacoid.gravicious.elements.GravitationalElement;
+import com.tacoid.gravicious.elements.LevelElement;
 import com.tacoid.gravicious.elements.Planet;
 
 public class GameMechanics implements ContactListener{
@@ -50,7 +53,22 @@ public class GameMechanics implements ContactListener{
 		if(gameState == GameState.RUNNING) {
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
-				level.getWorld().step(delta, 4, 4);
+				World world = level.getWorld();
+				world.step(delta, 4, 4);
+				//world.clearForces();
+				for (LevelElement l : level.getLevelElements()) {
+					if (l instanceof GravitationalElement) {
+						GravitationalElement g = (GravitationalElement) l;
+						float grav = g.getGravity();
+						Vector2 d = new Vector2(g.getX() - player.getX(), g.getY() - player.getY());
+						float force = 100000000 * grav / d.len2();
+						d.nor();
+						d.mul(force);
+						System.out.println(force);
+						player.getBody().applyForce(d, player.getBody().getWorldCenter());
+						System.out.println(d);
+					}
+				}
 			} else {
 
 			}

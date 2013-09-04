@@ -54,19 +54,21 @@ public class GameMechanics implements ContactListener{
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
 				World world = level.getWorld();
-				world.step(delta, 4, 4);
+				world.step(delta*4, 4, 4);
 				//world.clearForces();
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
 						GravitationalElement g = (GravitationalElement) l;
 						float grav = g.getGravity();
 						Vector2 d = new Vector2(g.getX() - player.getX(), g.getY() - player.getY());
-						float force = 100000000 * grav / d.len2();
-						d.nor();
-						d.mul(force);
-						System.out.println(force);
-						player.getBody().applyForce(d, player.getBody().getWorldCenter());
-						System.out.println(d);
+						if(d.len() < g.getInfluenceRadius()) {
+							float force = 100000000 * grav / d.len2();
+							d.nor();
+							d.mul(force);
+							System.out.println(force);
+							player.getBody().applyForce(d, player.getBody().getWorldCenter());
+							System.out.println(d);
+						}
 					}
 				}
 			} else {

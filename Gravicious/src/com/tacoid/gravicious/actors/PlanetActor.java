@@ -51,6 +51,10 @@ public class PlanetActor extends ElementActor {
 				shapeRenderer.setColor(getColorFromGravity());
 				shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius());
 			shapeRenderer.end();
+			shapeRenderer.begin(ShapeType.Circle);
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius());
+			shapeRenderer.end();
 		batch.begin();
 	}
 

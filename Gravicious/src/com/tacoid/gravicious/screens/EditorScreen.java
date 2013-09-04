@@ -19,7 +19,7 @@ import com.tacoid.gravicious.elements.Star;
 import com.tacoid.gravicious.elements.Sun;
 
 
-public class EditorScreen extends GameScreen {
+public class EditorScreen extends AbstractGameScreen {
 
 	private static EditorScreen instance = null;
 	Box2DDebugRenderer debugRenderer;  
@@ -111,7 +111,7 @@ public class EditorScreen extends GameScreen {
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					PlayScreen screen = PlayScreen.getInstance();
+					GameScreen screen = GameScreen.getInstance();
 					screen.init();
 					screen.setLevel(level);
 					Gravicious.getInstance().setScreen(screen);
@@ -202,13 +202,7 @@ public class EditorScreen extends GameScreen {
 
 	@Override
 	public void renderScreen(float delta) {
-		final float BOX_STEP=1/60f;  
-		final int BOX_VELOCITY_ITERATIONS=6;  
-		final int BOX_POSITION_ITERATIONS=2;  
-		final float WORLD_TO_BOX=0.01f;  
-		final float BOX_WORLD_TO=100f; 
-		debugRenderer.render(level.getWorld(), stage.getCamera().combined);
-		level.getWorld().step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
+
 	}
 
 	public void setLevel(Level level) {

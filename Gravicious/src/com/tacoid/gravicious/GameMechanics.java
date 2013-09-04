@@ -54,7 +54,7 @@ public class GameMechanics implements ContactListener{
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
 				World world = level.getWorld();
-				world.step(delta*4, 4, 4);
+				world.step(delta*200, 4, 4);
 				//world.clearForces();
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
@@ -62,7 +62,7 @@ public class GameMechanics implements ContactListener{
 						float grav = g.getGravity();
 						Vector2 d = new Vector2(g.getX() - player.getX(), g.getY() - player.getY());
 						if(d.len() < g.getInfluenceRadius()) {
-							float force = 100000000 * grav / d.len2();
+							float force = 10000 * grav / d.len2();
 							d.nor();
 							d.mul(force);
 							System.out.println(force);
@@ -78,7 +78,14 @@ public class GameMechanics implements ContactListener{
 	}
 
 	public void jump() {
-
+		if(playerState == PlayerState.WALKING) {
+			float force = 400;
+			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
+			d.nor();
+			d.mul(force);
+			player.getBody().applyForce(d, player.getBody().getWorldCenter());
+			playerState = PlayerState.FLYING;
+		}
 	}
 
 	public void setLevel(Level level) {

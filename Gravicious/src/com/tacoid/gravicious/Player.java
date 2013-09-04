@@ -56,6 +56,14 @@ public class Player extends Actor {
 		return body.getPosition().y;
 	}
 	
+	public void setX(float x) {
+		body.setTransform(x, body.getPosition().y, body.getAngle());
+	}
+	
+	public void setY(float y) {
+		body.setTransform(body.getPosition().x, y, body.getAngle());
+	}
+	
 	public Body getBody() {
 		return body;
 	}

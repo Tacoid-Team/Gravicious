@@ -30,6 +30,7 @@ public class GameMechanics implements ContactListener{
 	private GameState gameState;
 	private PlayerState playerState;
 	private GravitationalElement walkedElement;
+	private float playerAngle;
 
 	public GameMechanics() {
 		gameState = GameState.IDLE;
@@ -65,13 +66,17 @@ public class GameMechanics implements ContactListener{
 							float force = 10000 * grav / d.len2();
 							d.nor();
 							d.mul(force);
-							System.out.println(force);
+							//System.out.println(force);
 							player.getBody().applyForce(d, player.getBody().getWorldCenter());
-							System.out.println(d);
+							//System.out.println(d);
 						}
 					}
 				}
 			} else {
+				playerAngle+=0.01;
+				//System.out.println(playerAngle);
+				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
+				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
 
 			}
 		}
@@ -115,6 +120,8 @@ public class GameMechanics implements ContactListener{
 				planet = (Planet) bodyB.getUserData();
 			}
 
+			playerAngle = -(float)( Math.atan2(player.getX() - planet.getX(),  player.getY() - planet.getY())) + (float) Math.PI/2;
+			System.out.println("Angle="+playerAngle);
 			playerState = PlayerState.WALKING;
 			walkedElement = planet;
 		}

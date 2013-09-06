@@ -1,5 +1,6 @@
 package com.tacoid.gravicious.elements;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,6 +13,7 @@ import com.tacoid.gravicious.Gravicious;
 
 public abstract class GravitationalElement extends LevelElement {
 
+	float M = 100f; // Constante universelle G * masse. Enfin, c'est complètement arbitraire hein.
 	float gravity = 10.0f;
 	float radius = 100.0f;
 	float influenceRadius = 2*radius;
@@ -57,21 +59,6 @@ public abstract class GravitationalElement extends LevelElement {
 			});
 		}
 	}
-	
-	private class InfluenceButton extends TextButton {
-		private float increment;
-		public InfluenceButton(float inc, String string) {
-			super(string, Gravicious.getInstance().globalSkin);
-			this.increment = inc;
-			addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					setInfluenceRadiusFactor(getInfluenceRadiusFactor()+increment);
-				}
-			});
-		}
-	}
-
 
 	private class GravitySlider extends Slider {
 		public GravitySlider(float min, float max) {
@@ -80,18 +67,6 @@ public abstract class GravitationalElement extends LevelElement {
 				@Override
 				public void changed (ChangeEvent event, Actor actor){
 					setGravity(((Slider)actor).getValue());
-				}
-			});
-		}
-	}
-	
-	private class InfluenceSlider extends Slider {
-		public InfluenceSlider(float min, float max) {
-			super(min, max, 1.0f, false, Gravicious.getInstance().globalSkin);
-			addListener(new ChangeListener() {
-				@Override
-				public void changed (ChangeEvent event, Actor actor){
-					setInfluenceRadiusFactor(((Slider)actor).getValue()/100);
 				}
 			});
 		}
@@ -108,13 +83,6 @@ public abstract class GravitationalElement extends LevelElement {
 		table.add(radius_slider);
 		table.add(new RadiusButton(-2, "-"));
 		table.add(new RadiusButton(2, "+"));
-		table.row();
-		table.add(new Label("influence radius", Gravicious.getInstance().globalSkin));
-		InfluenceSlider influence_slider = new InfluenceSlider(100, 400);
-		influence_slider.setValue(getInfluenceRadiusFactor()*100);
-		table.add(influence_slider);
-		table.add(new InfluenceButton(-0.01f, "-"));
-		table.add(new InfluenceButton(0.01f, "+"));
 		table.row();
 		table.add(new Label("gravity", Gravicious.getInstance().globalSkin));
 		GravitySlider gravity_slider = new GravitySlider(1, 50);
@@ -145,31 +113,27 @@ public abstract class GravitationalElement extends LevelElement {
 		return gravity;
 	}
 	
-	public float getInfluenceRadius() {
-		return influenceRadius;
+	public float getInfluenceRadius(float mass) {
+		float s = 3f; // Force à partir de laquelle on passe l'attraction à 0.
+		return (float) Math.sqrt(M * mass * gravity / s);
 	}
-
-	public void setInfluenceRadius(float influenceRadius) {
-		if(radius <= influenceRadius)
-			this.influenceRadius = influenceRadius;
-		else
-			this.influenceRadius = radius;
-	}
-	
-	public void setInfluenceRadiusFactor(float factor) {
-		if(factor >= 1.0f)
-			this.influenceRadius = radius * factor;
-		else
-			this.influenceRadius = radius;
-	}
-	public float getInfluenceRadiusFactor() {
-		return influenceRadius / radius;
-	}
-
 
 	@Override
 	public Table getWidget() {
 		return table;
+	}
+	
+	public Vector2 computeAttraction(Vector2 pos, float mass) {
+		float grav = getGravity();
+		Vector2 d = new Vector2(getX() - pos.x, getY() - pos.y);
+		if(d.len() < getInfluenceRadius(mass)) {
+			float force = M * mass * grav / d.len2();
+			d.nor();
+			d.mul(force);
+			return d;
+		} else {
+			return null;
+		}
 	}
 
 }

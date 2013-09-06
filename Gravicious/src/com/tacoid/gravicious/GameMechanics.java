@@ -61,15 +61,10 @@ public class GameMechanics implements ContactListener{
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
 						GravitationalElement g = (GravitationalElement) l;
-						float grav = g.getGravity();
-						Vector2 d = new Vector2(g.getX() - player.getX(), g.getY() - player.getY());
-						if(d.len() < g.getInfluenceRadius()) {
-							float force = 10000 * grav / d.len2();
-							d.nor();
-							d.mul(force);
-							//System.out.println(force);
+						
+						Vector2 d = g.computeAttraction(player.getBody().getPosition(), 100);
+						if (d != null) {
 							player.getBody().applyForce(d, player.getBody().getWorldCenter());
-							//System.out.println(d);
 						}
 					}
 				}
@@ -136,7 +131,7 @@ public class GameMechanics implements ContactListener{
 			
 			/* Explication du calcul: 
 			 * On calcul tangent, le vecteur tangent au cercle au niveau du point de colision, dans le sens trigonometrique
-			 * Le produit vectoriel entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalisé)
+			 * Le produit vectoriel entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalisï¿½)
 			 * Si c'est positif, on tourne dans le sens trigo, sinon dans le sens inverse
 			 * */
 			Vector2 tangent = new Vector2(planet.getY() - planet.getY(), player.getX()-planet.getX());

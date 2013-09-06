@@ -53,7 +53,7 @@ public class PlanetActor extends ElementActor {
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.Circle);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius());
+				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius(100));
 			shapeRenderer.end();
 		batch.begin();
 	}
@@ -79,10 +79,10 @@ public class PlanetActor extends ElementActor {
 		CircleShape dynamicCircle = new CircleShape();  
 		dynamicCircle.setRadius(this.planet.getRadius());  
 		FixtureDef fixtureDef = new FixtureDef();  
-		fixtureDef.shape = dynamicCircle;  
-		fixtureDef.density = 1.0f;  
+		fixtureDef.shape = dynamicCircle;
+		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.0f;  
-		fixtureDef.restitution = 1;  
+		fixtureDef.restitution = 1;
 		body.createFixture(fixtureDef);
 		body.setUserData(this.planet);
 	}

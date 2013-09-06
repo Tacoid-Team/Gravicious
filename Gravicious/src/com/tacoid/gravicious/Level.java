@@ -46,6 +46,9 @@ public class Level extends Group{
 		if(element != null) {
 			element.setLevel(null);
 			elements.remove(element.getName());
+			if(element instanceof Start) {
+				startElement = null;
+			}
 			System.out.println("Element " + element.getName() + " removed.");
 			refreshGroup();
 		}

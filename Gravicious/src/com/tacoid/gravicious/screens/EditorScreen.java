@@ -16,6 +16,7 @@ import com.tacoid.gravicious.Level;
 import com.tacoid.gravicious.elements.LevelElement;
 import com.tacoid.gravicious.elements.Planet;
 import com.tacoid.gravicious.elements.Star;
+import com.tacoid.gravicious.elements.Start;
 import com.tacoid.gravicious.elements.Sun;
 
 
@@ -128,6 +129,7 @@ public class EditorScreen extends AbstractGameScreen {
 		tableBL = new Table();
 		tableBL.setFillParent(true);
 		tableBL.left().bottom();
+		tableBL.add(new ElementButton(Start.class));
 		tableBL.add(new ElementButton(Planet.class));
 		tableBL.add(new ElementButton(Sun.class));
 		tableBL.add(new ElementButton(Star.class));

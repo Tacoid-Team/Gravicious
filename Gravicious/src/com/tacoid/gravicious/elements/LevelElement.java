@@ -35,6 +35,15 @@ public abstract class LevelElement {
 	public float getY() {
 		return actor.getY();
 	}
+	
+	public void setX(float x) {
+		actor.setX(x);
+	}
+
+	public void setY(float y) {
+		actor.setY(y);
+	}
+	
 
 	public String getName() {
 		return name;

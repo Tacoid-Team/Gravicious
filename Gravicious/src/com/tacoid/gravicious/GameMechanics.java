@@ -40,8 +40,8 @@ public class GameMechanics implements ContactListener{
 	public void init(Level level) {
 		this.level = level;
 		player = new Player(level.getWorld());
-		player.setX(400);
-		player.setY(400);
+		player.setX(level.getStartElement().getX());
+		player.setY(level.getStartElement().getY());
 		gameState = GameState.RUNNING;
 		playerState = PlayerState.FLYING;
 		level.getWorld().setContactListener(this);

@@ -84,12 +84,20 @@ public class GameMechanics implements ContactListener{
 	}
 
 	public void jump() {
+		final float verticalForce = 400;
+		final float tangentForce = 100;
 		if(playerState == PlayerState.WALKING) {
-			float force = 400;
+			
 			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
 			d.nor();
-			d.mul(force);
+			d.mul(verticalForce);
+			Vector2 t = new Vector2(walkedElement.getY() - player.getY(), player.getX()-walkedElement.getX());
+			t.nor();
+			t.mul(playerDirection);
+			t.mul(tangentForce);
+
 			player.getBody().applyForce(d, player.getBody().getWorldCenter());
+			player.getBody().applyForce(t, player.getBody().getWorldCenter());
 			playerState = PlayerState.FLYING;
 		}
 	}

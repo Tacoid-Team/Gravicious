@@ -31,6 +31,7 @@ public class GameMechanics implements ContactListener{
 	private PlayerState playerState;
 	private GravitationalElement walkedElement;
 	private float playerAngle;
+	private float playerDirection;
 
 	public GameMechanics() {
 		gameState = GameState.IDLE;
@@ -73,7 +74,7 @@ public class GameMechanics implements ContactListener{
 					}
 				}
 			} else {
-				playerAngle+=0.01;
+				playerAngle+=(0.01*playerDirection);
 				//System.out.println(playerAngle);
 				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
 				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
@@ -114,13 +115,34 @@ public class GameMechanics implements ContactListener{
 				|| bodyB.getUserData() instanceof Planet) {
 			System.out.println("Grounded");
 			Planet planet;
+			Body playerBody;
 			if(bodyA.getUserData() instanceof Planet) {
 				planet = (Planet) bodyA.getUserData();
+				playerBody = bodyB;
 			} else {
 				planet = (Planet) bodyB.getUserData();
+				playerBody = bodyA;
 			}
 
 			playerAngle = -(float)( Math.atan2(player.getX() - planet.getX(),  player.getY() - planet.getY())) + (float) Math.PI/2;
+			
+			/* Explication du calcul: 
+			 * On calcul tangent, le vecteur tangent au cercle au niveau du point de colision, dans le sens trigonometrique
+			 * Le produit vectoriel entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalisé)
+			 * Si c'est positif, on tourne dans le sens trigo, sinon dans le sens inverse
+			 * */
+			Vector2 tangent = new Vector2(planet.getY() - planet.getY(), player.getX()-planet.getX());
+			tangent.nor();
+			
+			float cross = tangent.crs(playerBody.getLinearVelocity());
+			if(cross>0) {
+				playerDirection = 1.0f;
+			} else {
+				playerDirection = -1.0f;
+			}
+			
+			System.out.println(cross);
+			
 			System.out.println("Angle="+playerAngle);
 			playerState = PlayerState.WALKING;
 			walkedElement = planet;

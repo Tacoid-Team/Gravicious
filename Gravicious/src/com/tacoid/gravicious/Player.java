@@ -28,7 +28,7 @@ public class Player extends Actor {
 		dynamicCircle.setRadius(20f);  
 		FixtureDef fixtureDef = new FixtureDef();  
 		fixtureDef.shape = dynamicCircle;  
-		fixtureDef.density = 1.0f;  
+		fixtureDef.density = 1f;  
 		fixtureDef.friction = 0.0f;  
 		fixtureDef.restitution = 1;  
 		body.createFixture(fixtureDef); 

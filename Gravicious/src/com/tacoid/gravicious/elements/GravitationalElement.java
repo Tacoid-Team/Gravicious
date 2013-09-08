@@ -21,13 +21,14 @@ public abstract class GravitationalElement extends LevelElement {
 
 	private class RadiusButton extends TextButton {
 		private float increment;
-		public RadiusButton(float inc, String string) {
+		public RadiusButton(float inc, String string, final Slider slider) {
 			super(string, Gravicious.getInstance().globalSkin);
 			this.increment = inc;
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					setRadius(getRadius()+increment);
+					slider.setValue(getRadius());
 				}
 			});
 		}
@@ -47,13 +48,14 @@ public abstract class GravitationalElement extends LevelElement {
 
 	private class GravityButton extends TextButton {
 		private float increment;
-		public GravityButton(float inc, String string) {
+		public GravityButton(float inc, String string, final Slider slider) {
 			super(string, Gravicious.getInstance().globalSkin);
 			this.increment = inc;
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					setGravity(getGravity()+increment);
+					slider.setValue(getGravity());
 				}
 			});
 		}
@@ -80,15 +82,15 @@ public abstract class GravitationalElement extends LevelElement {
 		RadiusSlider radius_slider = new RadiusSlider(1, 30);
 		radius_slider.setValue(getRadius());
 		table.add(radius_slider);
-		table.add(new RadiusButton(-1, "-"));
-		table.add(new RadiusButton(1, "+"));
+		table.add(new RadiusButton(-1, "-", radius_slider));
+		table.add(new RadiusButton(1, "+", radius_slider));
 		table.row();
 		table.add(new Label("gravity", Gravicious.getInstance().globalSkin));
 		GravitySlider gravity_slider = new GravitySlider(1, 5);
 		gravity_slider.setValue(getGravity());
 		table.add(gravity_slider);
-		table.add(new GravityButton(-1, "-"));
-		table.add(new GravityButton(1, "+"));
+		table.add(new GravityButton(-1, "-", gravity_slider));
+		table.add(new GravityButton(1, "+", gravity_slider));
 
 	}
 

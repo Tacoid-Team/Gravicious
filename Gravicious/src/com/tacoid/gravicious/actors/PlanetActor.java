@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -23,7 +22,6 @@ public class PlanetActor extends ElementActor {
 	public ShapeRenderer shapeRenderer;
 	public Planet planet;
 	private BodyDef bodyDef;
-	private Body body;
 
 	public PlanetActor(Planet p) {
 		super(p);
@@ -33,7 +31,7 @@ public class PlanetActor extends ElementActor {
 		setY(100);
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(getX(), getY());
+		bodyDef.position.set(getX() / 10, getY() / 10);
 	}
 
 	private Color getColorFromGravity() {
@@ -49,11 +47,11 @@ public class PlanetActor extends ElementActor {
 		batch.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 				shapeRenderer.setColor(getColorFromGravity());
-				shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius());
+				shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius() * 10);
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.Circle);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius(100));
+				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius(100) * 10);
 			shapeRenderer.end();
 		batch.begin();
 	}
@@ -66,7 +64,7 @@ public class PlanetActor extends ElementActor {
 		if (touchable && this.getTouchable() != Touchable.enabled) return null;
 
 		double distance = x*x + y*y;
-		if (distance <= planet.getRadius()*planet.getRadius()){
+		if (distance <= 100*planet.getRadius()*planet.getRadius()){
 			return this;
 		} else {
 			return null;
@@ -101,7 +99,7 @@ public class PlanetActor extends ElementActor {
 
 	void updateBodyTransform() {
 		if(body != null) {
-			body.setTransform(new Vector2(getX(), getY()), 0.0f);
+			body.setTransform(new Vector2(getX() / 10, getY() / 10), 0.0f);
 		}
 	}
 

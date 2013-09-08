@@ -56,7 +56,7 @@ public class GameMechanics implements ContactListener{
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
 				World world = level.getWorld();
-				world.step(delta*200, 4, 4);
+				world.step(delta*10, 4, 4);
 				//world.clearForces();
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
@@ -71,28 +71,35 @@ public class GameMechanics implements ContactListener{
 			} else {
 				playerAngle+=(0.01*playerDirection);
 				//System.out.println(playerAngle);
-				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
-				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
+				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()*10+20)*Math.cos(playerAngle)));
+				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()*10+20)*Math.sin(playerAngle)));
 
 			}
 		}
 	}
 
 	public void jump() {
-		final float verticalForce = 400;
-		final float tangentForce = 100;
 		if(playerState == PlayerState.WALKING) {
+			final float verticalForce = (float) Math.sqrt(2 * walkedElement.getGravity() * (20 - walkedElement.getRadius()));
+
+			//final float tangentForce = 1;
 			
 			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
 			d.nor();
 			d.mul(verticalForce);
+			
+			d.rotate(playerDirection * 30);
+			
+			/*
 			Vector2 t = new Vector2(walkedElement.getY() - player.getY(), player.getX()-walkedElement.getX());
 			t.nor();
 			t.mul(playerDirection);
 			t.mul(tangentForce);
+			d.add(t);*/
 
-			player.getBody().applyForce(d, player.getBody().getWorldCenter());
-			player.getBody().applyForce(t, player.getBody().getWorldCenter());
+			System.out.println("force " + verticalForce);
+			player.getBody().setLinearVelocity(d);
+			
 			playerState = PlayerState.FLYING;
 		}
 	}

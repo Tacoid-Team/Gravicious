@@ -14,9 +14,8 @@ import com.tacoid.gravicious.Gravicious;
 public abstract class GravitationalElement extends LevelElement {
 
 	float M = 100f; // Constante universelle G * masse. Enfin, c'est complètement arbitraire hein.
-	float gravity = 10.0f;
-	float radius = 100.0f;
-	float influenceRadius = 2*radius;
+	float gravity = 1.0f;
+	float radius = 10.0f;
 
 	Table table;
 
@@ -78,18 +77,18 @@ public abstract class GravitationalElement extends LevelElement {
 		table.setFillParent(true);
 		table.right().bottom();
 		table.add(new Label("radius", Gravicious.getInstance().globalSkin));
-		RadiusSlider radius_slider = new RadiusSlider(1, 500);
+		RadiusSlider radius_slider = new RadiusSlider(1, 30);
 		radius_slider.setValue(getRadius());
 		table.add(radius_slider);
-		table.add(new RadiusButton(-2, "-"));
-		table.add(new RadiusButton(2, "+"));
+		table.add(new RadiusButton(-1, "-"));
+		table.add(new RadiusButton(1, "+"));
 		table.row();
 		table.add(new Label("gravity", Gravicious.getInstance().globalSkin));
-		GravitySlider gravity_slider = new GravitySlider(1, 50);
+		GravitySlider gravity_slider = new GravitySlider(1, 5);
 		gravity_slider.setValue(getGravity());
 		table.add(gravity_slider);
-		table.add(new GravityButton(-2, "-"));
-		table.add(new GravityButton(2, "+"));
+		table.add(new GravityButton(-1, "-"));
+		table.add(new GravityButton(1, "+"));
 
 	}
 
@@ -114,7 +113,7 @@ public abstract class GravitationalElement extends LevelElement {
 	}
 	
 	public float getInfluenceRadius(float mass) {
-		float s = 3f; // Force à partir de laquelle on passe l'attraction à 0.
+		float s = 20f; // Force à partir de laquelle on passe l'attraction à 0.
 		return (float) Math.sqrt(M * mass * gravity / s);
 	}
 
@@ -125,13 +124,17 @@ public abstract class GravitationalElement extends LevelElement {
 	
 	public Vector2 computeAttraction(Vector2 pos, float mass) {
 		float grav = getGravity();
-		Vector2 d = new Vector2(getX() - pos.x, getY() - pos.y);
+		Vector2 d = new Vector2(getX() / 10 - pos.x, getY() / 10 - pos.y);
+		// XXX: j'aime pas devoir faire ces conversions partout. Je veux une méthode qui me donne direct le bon nombre.
 		if(d.len() < getInfluenceRadius(mass)) {
 			float force = M * mass * grav / d.len2();
+//			System.out.println("f" + force);
 			d.nor();
 			d.mul(force);
+//			System.out.println(d);
 			return d;
 		} else {
+//			System.out.println("null");
 			return null;
 		}
 	}

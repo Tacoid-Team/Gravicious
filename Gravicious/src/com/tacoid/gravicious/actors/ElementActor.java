@@ -1,5 +1,7 @@
 package com.tacoid.gravicious.actors;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,10 +12,15 @@ import com.tacoid.gravicious.screens.EditorScreen;
 public abstract class ElementActor extends Actor {
 
 	protected LevelElement element;
+	protected Body body;
 
 	abstract public void createBody(World world);
 	abstract public void updateBody();
 
+	public Vector2 getBodyPosition() {
+		return body.getPosition();
+	}
+	
 	public ElementActor(final LevelElement element) {
 
 		this.addListener(new ClickListener() {

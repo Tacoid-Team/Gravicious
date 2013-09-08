@@ -138,20 +138,18 @@ public class GameMechanics implements ContactListener{
 			
 			/* Explication du calcul: 
 			 * On calcul tangent, le vecteur tangent au cercle au niveau du point de colision, dans le sens trigonometrique
-			 * Le produit vectoriel entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalis�)
+			 * Le produit scalaire entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalis�)
 			 * Si c'est positif, on tourne dans le sens trigo, sinon dans le sens inverse
 			 * */
 			Vector2 tangent = new Vector2(planet.getY() - player.getY(), player.getX()-planet.getX());
 			tangent.nor();
 			
-			float cross = tangent.crs(playerBody.getLinearVelocity());
-			if(cross>0) {
+			float dot = tangent.dot(playerBody.getLinearVelocity());
+			if(dot>0) {
 				playerDirection = 1.0f;
 			} else {
 				playerDirection = -1.0f;
 			}
-			
-			System.out.println(cross);
 			
 			System.out.println("Angle="+playerAngle);
 			playerState = PlayerState.WALKING;

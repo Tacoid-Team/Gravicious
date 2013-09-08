@@ -141,7 +141,7 @@ public class GameMechanics implements ContactListener{
 			 * Le produit vectoriel entre tangent et le vecteur vitesse nous donne la projection scalaire de la vitesse sur tangent (car tangent est normalis�)
 			 * Si c'est positif, on tourne dans le sens trigo, sinon dans le sens inverse
 			 * */
-			Vector2 tangent = new Vector2(planet.getY() - planet.getY(), player.getX()-planet.getX());
+			Vector2 tangent = new Vector2(planet.getY() - player.getY(), player.getX()-planet.getX());
 			tangent.nor();
 			
 			float cross = tangent.crs(playerBody.getLinearVelocity());

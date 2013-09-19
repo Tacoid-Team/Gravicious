@@ -1,7 +1,6 @@
 package com.tacoid.gravicious.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.tacoid.gravicious.actors.StarActor;
 import com.tacoid.gravicious.actors.StartActor;
 
 public class Start extends LevelElement {

@@ -138,7 +138,11 @@ public class GameScreen extends AbstractGameScreen implements InputProcessor {
 	}
 
 	@Override
-	public boolean touchDown(int x, int y, int pointer, int button) {		
+	public boolean touchDown(int x, int y, int pointer, int button) {	
+		if(x<this.VIRTUAL_WIDTH/2)
+			game.setLeftPressed(true);
+		if(x>this.VIRTUAL_WIDTH/2)
+			game.setRightPressed(true);
 		return stage.touchDown(x, y, pointer, button);
 	}
 
@@ -149,7 +153,11 @@ public class GameScreen extends AbstractGameScreen implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		game.jump();
+		//game.jump();
+		if(x<this.VIRTUAL_WIDTH/2)
+			game.setLeftPressed(false);
+		if(x>this.VIRTUAL_WIDTH/2)
+			game.setRightPressed(false);
 		return stage.touchUp(x, y, pointer, button);
 	}
 	

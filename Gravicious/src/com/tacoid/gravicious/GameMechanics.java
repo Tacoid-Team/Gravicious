@@ -72,7 +72,9 @@ public class GameMechanics implements ContactListener{
 					}
 				}
 			} else {
-				if(leftPressed) {
+				if(leftPressed && rightPressed) {
+					jump();
+				} if(leftPressed) {
 					player.speedUp(1.0f);
 				} else if(rightPressed) {
 					player.speedUp(-1.0f);

@@ -108,6 +108,7 @@ public class EditorScreen extends AbstractGameScreen {
 
 	private class TestButton extends TextButton {
 		public TestButton() {
+			
 			super("Test", Gravicious.getInstance().globalSkin);
 			addListener(new ClickListener() {
 				@Override

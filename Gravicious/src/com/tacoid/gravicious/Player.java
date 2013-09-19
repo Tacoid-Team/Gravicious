@@ -18,6 +18,11 @@ public class Player extends Actor {
 	private Body body;
 	
 	private float radius = 20;
+	
+	private final float maxAngularSpeed = 0.02f;
+	private float angle;
+	private float direction;
+	private float angularSpeed;
 
 	public Player(World world) {
 		shapeRenderer = new ShapeRenderer();
@@ -35,6 +40,10 @@ public class Player extends Actor {
 		fixtureDef.restitution = 1;  
 		body.createFixture(fixtureDef); 
 		body.setUserData(this);
+		
+		setAngle(0.0f);
+		setDirection(1.0f);
+		setAngularSpeed(0.01f);
 	}
 
 	@Override
@@ -68,5 +77,33 @@ public class Player extends Actor {
 	
 	public Body getBody() {
 		return body;
+	}
+
+	public float getMaxAngularSpeed() {
+		return maxAngularSpeed;
+	}
+
+	public float getAngle() {
+		return angle;
+	}
+
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
+
+	public float getDirection() {
+		return direction;
+	}
+
+	public void setDirection(float direction) {
+		this.direction = direction;
+	}
+
+	public float getAngularSpeed() {
+		return angularSpeed;
+	}
+
+	public void setAngularSpeed(float angularSpeed) {
+		this.angularSpeed = angularSpeed;
 	}
 }

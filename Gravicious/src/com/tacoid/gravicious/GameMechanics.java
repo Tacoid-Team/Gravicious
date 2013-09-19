@@ -30,8 +30,7 @@ public class GameMechanics implements ContactListener{
 	private GameState gameState;
 	private PlayerState playerState;
 	private GravitationalElement walkedElement;
-	private float playerAngle;
-	private float playerDirection;
+
 
 	public GameMechanics() {
 		gameState = GameState.IDLE;
@@ -71,10 +70,9 @@ public class GameMechanics implements ContactListener{
 					}
 				}
 			} else {
-				playerAngle+=(0.01*playerDirection);
-				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
-				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
-
+				player.setAngle(player.getAngle() + player.getAngularSpeed()*player.getDirection());
+				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(player.getAngle())));
+				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(player.getAngle())));
 			}
 		}
 	}
@@ -82,21 +80,15 @@ public class GameMechanics implements ContactListener{
 	public void jump() {
 		if(playerState == PlayerState.WALKING) {
 			float verticalForce = (walkedElement.getInfluenceRadius()-walkedElement.getRadius())*walkedElement.getGravity()*0.012f;
-
 			float tangentForce = 10;
 			
 			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
 			d.nor();
 			d.mul(verticalForce);
-			/*
-			
-			
-			d.rotate(playerDirection * 30);
-			*/
 			
 			Vector2 t = new Vector2(walkedElement.getY() - player.getY(), player.getX()-walkedElement.getX());
 			t.nor();
-			t.mul(playerDirection);
+			t.mul(player.getDirection());
 			t.mul(tangentForce);
 			d.add(t);
 
@@ -137,7 +129,7 @@ public class GameMechanics implements ContactListener{
 				playerBody = bodyA;
 			}
 
-			playerAngle = -(float)( Math.atan2(player.getX() - planet.getX(),  player.getY() - planet.getY())) + (float) Math.PI/2;
+			player.setAngle(-(float)( Math.atan2(player.getX() - planet.getX(),  player.getY() - planet.getY())) + (float) Math.PI/2);
 			
 			/* Explication du calcul: 
 			 * On calcul tangent, le vecteur tangent au cercle au niveau du point de colision, dans le sens trigonometrique
@@ -149,12 +141,12 @@ public class GameMechanics implements ContactListener{
 			
 			float dot = tangent.dot(playerBody.getLinearVelocity());
 			if(dot>0) {
-				playerDirection = 1.0f;
+				player.setDirection(1.0f);
 			} else {
-				playerDirection = -1.0f;
+				player.setDirection(-1.0f);
 			}
 			
-			System.out.println("Angle="+playerAngle);
+			System.out.println("Angle="+player.getAngle());
 			playerState = PlayerState.WALKING;
 			walkedElement = planet;
 		}

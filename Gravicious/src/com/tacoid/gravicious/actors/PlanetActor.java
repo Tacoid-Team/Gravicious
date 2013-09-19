@@ -62,7 +62,7 @@ public class PlanetActor extends ElementActor {
 		if (touchable && this.getTouchable() != Touchable.enabled) return null;
 
 		double distance = x*x + y*y;
-		if (distance <= 100*planet.getRadius()*planet.getRadius()){
+		if (distance <= planet.getRadius()*planet.getRadius()){
 			return this;
 		} else {
 			return null;

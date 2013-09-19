@@ -17,7 +17,7 @@ public class Player extends Actor {
 	private Color shapeFillColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 	private Body body;
 	
-	private float radius = 2;
+	private float radius = 20;
 
 	public Player(World world) {
 		shapeRenderer = new ShapeRenderer();
@@ -27,7 +27,7 @@ public class Player extends Actor {
 		body = world.createBody(bodyDef);  
 		CircleShape dynamicCircle = new CircleShape();
 		body.setUserData(this);
-		dynamicCircle.setRadius(radius);  
+		dynamicCircle.setRadius(UnitConverter.PixelToMeters(radius));  
 		FixtureDef fixtureDef = new FixtureDef();  
 		fixtureDef.shape = dynamicCircle;  
 		fixtureDef.density = 2f;  
@@ -43,27 +43,27 @@ public class Player extends Actor {
 		batch.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			shapeRenderer.setColor(shapeFillColor);
-			shapeRenderer.filledCircle(this.getX(), this.getY(), radius * 10);
+			shapeRenderer.filledCircle(getX(),getY(), radius );
 			shapeRenderer.end();
 		batch.begin();
 	}
 
 	@Override
 	public float getX() {
-		return body.getPosition().x * 10;
+		return UnitConverter.MetersToPixels(body.getPosition().x) ;
 	}
 
 	@Override
 	public float getY() {
-		return body.getPosition().y * 10;
+		return UnitConverter.MetersToPixels(body.getPosition().y);
 	}
 	
 	public void setX(float x) {
-		body.setTransform(x / 10, body.getPosition().y, body.getAngle());
+		body.setTransform(UnitConverter.PixelToMeters(x), body.getPosition().y, body.getAngle());
 	}
 	
 	public void setY(float y) {
-		body.setTransform(body.getPosition().x, y / 10, body.getAngle());
+		body.setTransform(body.getPosition().x, UnitConverter.PixelToMeters(y), body.getAngle());
 	}
 	
 	public Body getBody() {

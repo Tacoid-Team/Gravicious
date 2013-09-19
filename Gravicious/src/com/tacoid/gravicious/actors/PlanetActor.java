@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.tacoid.gravicious.Gravicious;
+import com.tacoid.gravicious.UnitConverter;
 import com.tacoid.gravicious.elements.Planet;
 import com.tacoid.gravicious.screens.AbstractGameScreen;
 
@@ -31,14 +32,7 @@ public class PlanetActor extends ElementActor {
 		setY(100);
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(getX() / 10, getY() / 10);
-	}
-
-	private Color getColorFromGravity() {
-		float scale = planet.getGravity() / 50.0f;
-		float r = 0.25f + 0.05f * scale;
-		float g = 0.61f - 0.30f * scale;
-		return new Color(r, g, 0.0f, 0.0f);
+		bodyDef.position.set(UnitConverter.PixelToMeters(getX()), UnitConverter.PixelToMeters(getY()));
 	}
 
 	@Override
@@ -46,12 +40,12 @@ public class PlanetActor extends ElementActor {
 		shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 		batch.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
-				shapeRenderer.setColor(getColorFromGravity());
-				shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius() * 10);
+				shapeRenderer.setColor(new Color(0.25f, 0.61f, 0f, 1.0f));
+				shapeRenderer.filledCircle(this.getX(), this.getY(), planet.getRadius());
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.Circle);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius(100) * 10);
+				shapeRenderer.circle(this.getX(), this.getY(), planet.getInfluenceRadius());
 			shapeRenderer.end();
 		batch.begin();
 	}
@@ -73,15 +67,17 @@ public class PlanetActor extends ElementActor {
 
 	@Override
 	public void createBody(World world) {
-		body = this.planet.getLevel().getWorld().createBody(bodyDef);  
-		CircleShape dynamicCircle = new CircleShape();  
+		body = this.planet.getLevel().getWorld().createBody(bodyDef);
+		
+		updateBody();
+		/*CircleShape dynamicCircle = new CircleShape();  
 		dynamicCircle.setRadius(this.planet.getRadius());  
 		FixtureDef fixtureDef = new FixtureDef();  
 		fixtureDef.shape = dynamicCircle;
 		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.0f;  
 		fixtureDef.restitution = 1;
-		body.createFixture(fixtureDef);
+		body.createFixture(fixtureDef);*/
 		body.setUserData(this.planet);
 	}
 
@@ -99,14 +95,16 @@ public class PlanetActor extends ElementActor {
 
 	void updateBodyTransform() {
 		if(body != null) {
-			body.setTransform(new Vector2(getX() / 10, getY() / 10), 0.0f);
+			body.setTransform(new Vector2(UnitConverter.PixelToMeters(getX()), 
+										  UnitConverter.PixelToMeters(getY())), 
+							   0.0f);
 		}
 	}
 
 	@Override
 	public void updateBody() {
 		CircleShape dynamicCircle = new CircleShape();  
-		dynamicCircle.setRadius(this.planet.getRadius());  
+		dynamicCircle.setRadius(UnitConverter.PixelToMeters(this.planet.getRadius()));  
 		FixtureDef fixtureDef = new FixtureDef();  
 		fixtureDef.shape = dynamicCircle;  
 		fixtureDef.density = 1.0f;  

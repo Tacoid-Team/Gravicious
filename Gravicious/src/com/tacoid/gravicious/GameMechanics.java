@@ -56,13 +56,13 @@ public class GameMechanics implements ContactListener{
 			level.update(delta);
 			if(playerState == PlayerState.FLYING) {
 				World world = level.getWorld();
-				world.step(delta*10, 4, 4);
-				//world.clearForces();
+				world.step(0.001f, 8,2);
+				world.clearForces();
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
 						GravitationalElement g = (GravitationalElement) l;
 						
-						Vector2 d = g.computeAttraction(player.getBody().getPosition(), 100);
+						Vector2 d = g.computeAttraction(new Vector2(player.getX(), player.getY()),100);
 						if (d != null) {
 							player.getBody().applyForce(d, player.getBody().getWorldCenter());
 						}
@@ -71,8 +71,8 @@ public class GameMechanics implements ContactListener{
 			} else {
 				playerAngle+=(0.01*playerDirection);
 				//System.out.println(playerAngle);
-				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()*10+20)*Math.cos(playerAngle)));
-				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()*10+20)*Math.sin(playerAngle)));
+				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
+				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
 
 			}
 		}
@@ -80,22 +80,24 @@ public class GameMechanics implements ContactListener{
 
 	public void jump() {
 		if(playerState == PlayerState.WALKING) {
-			final float verticalForce = (float) Math.sqrt(2 * walkedElement.getGravity() * (20 - walkedElement.getRadius()));
+			float verticalForce = (walkedElement.getInfluenceRadius()-walkedElement.getRadius())*walkedElement.getGravity()*0.012f;
 
-			//final float tangentForce = 1;
+			float tangentForce = 10;
 			
 			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
 			d.nor();
 			d.mul(verticalForce);
+			/*
+			
 			
 			d.rotate(playerDirection * 30);
+			*/
 			
-			/*
 			Vector2 t = new Vector2(walkedElement.getY() - player.getY(), player.getX()-walkedElement.getX());
 			t.nor();
 			t.mul(playerDirection);
 			t.mul(tangentForce);
-			d.add(t);*/
+			d.add(t);
 
 			System.out.println("force " + verticalForce);
 			player.getBody().setLinearVelocity(d);

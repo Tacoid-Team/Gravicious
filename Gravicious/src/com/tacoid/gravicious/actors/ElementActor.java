@@ -17,10 +17,6 @@ public abstract class ElementActor extends Actor {
 	abstract public void createBody(World world);
 	abstract public void updateBody();
 
-	public Vector2 getBodyPosition() {
-		return body.getPosition();
-	}
-	
 	public ElementActor(final LevelElement element) {
 
 		this.addListener(new ClickListener() {

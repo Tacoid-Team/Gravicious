@@ -13,9 +13,11 @@ import com.tacoid.gravicious.Gravicious;
 
 public abstract class GravitationalElement extends LevelElement {
 
-	float M = 100f; // Constante universelle G * masse. Enfin, c'est complètement arbitraire hein.
-	float gravity = 1.0f;
-	float radius = 10.0f;
+	float influenceRadius = 100.0f;
+	float gravity = 100.0f;
+
+
+	float radius = 50.0f;
 
 	Table table;
 
@@ -46,28 +48,29 @@ public abstract class GravitationalElement extends LevelElement {
 		}
 	}
 
-	private class GravityButton extends TextButton {
+	private class InfluenceButton extends TextButton {
 		private float increment;
-		public GravityButton(float inc, String string, final Slider slider) {
+		public InfluenceButton(float inc, String string, final Slider slider) {
 			super(string, Gravicious.getInstance().globalSkin);
 			this.increment = inc;
 			addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					setGravity(getGravity()+increment);
-					slider.setValue(getGravity());
+					setInfluenceRadius(getInfluenceRadius()+increment);
+					slider.setValue(getInfluenceRadius());
 				}
 			});
 		}
 	}
 
-	private class GravitySlider extends Slider {
-		public GravitySlider(float min, float max) {
+	private class InfluenceSlider extends Slider {
+		public InfluenceSlider(float min, float max) {
 			super(min, max, 1.0f, false, Gravicious.getInstance().globalSkin);
 			addListener(new ChangeListener() {
 				@Override
 				public void changed (ChangeEvent event, Actor actor){
-					setGravity(((Slider)actor).getValue());
+					setInfluenceRadius(((Slider)actor).getValue());
+					setValue(getInfluenceRadius());
 				}
 			});
 		}
@@ -79,18 +82,18 @@ public abstract class GravitationalElement extends LevelElement {
 		table.setFillParent(true);
 		table.right().bottom();
 		table.add(new Label("radius", Gravicious.getInstance().globalSkin));
-		RadiusSlider radius_slider = new RadiusSlider(1, 30);
+		RadiusSlider radius_slider = new RadiusSlider(40, 300);
 		radius_slider.setValue(getRadius());
 		table.add(radius_slider);
 		table.add(new RadiusButton(-1, "-", radius_slider));
 		table.add(new RadiusButton(1, "+", radius_slider));
 		table.row();
-		table.add(new Label("gravity", Gravicious.getInstance().globalSkin));
-		GravitySlider gravity_slider = new GravitySlider(1, 5);
-		gravity_slider.setValue(getGravity());
-		table.add(gravity_slider);
-		table.add(new GravityButton(-1, "-", gravity_slider));
-		table.add(new GravityButton(1, "+", gravity_slider));
+		table.add(new Label("Influence", Gravicious.getInstance().globalSkin));
+		InfluenceSlider influence_slider = new InfluenceSlider(getRadius(), getRadius()*8);
+		influence_slider.setValue(getInfluenceRadius());
+		table.add(influence_slider);
+		table.add(new InfluenceButton(-1, "-", influence_slider));
+		table.add(new InfluenceButton(1, "+", influence_slider));
 
 	}
 
@@ -104,20 +107,23 @@ public abstract class GravitationalElement extends LevelElement {
 	public float getRadius() {
 		return radius;
 	}
-
-	private void setGravity(float gravity) {
-		if (gravity > 0.0f)
-			this.gravity = gravity;  
+	
+	public float getInfluenceRadius() {
+		return influenceRadius;
 	}
+
+	public void setInfluenceRadius(float influenceRadius) {
+		if(influenceRadius >= this.radius)
+			this.influenceRadius = influenceRadius;
+		else 
+			this.influenceRadius = this.radius;
+	}
+	
 
 	public float getGravity() {
 		return gravity;
 	}
-	
-	public float getInfluenceRadius(float mass) {
-		float s = 20f; // Force à partir de laquelle on passe l'attraction à 0.
-		return (float) Math.sqrt(M * mass * gravity / s);
-	}
+
 
 	@Override
 	public Table getWidget() {
@@ -125,20 +131,12 @@ public abstract class GravitationalElement extends LevelElement {
 	}
 	
 	public Vector2 computeAttraction(Vector2 pos, float mass) {
-		float grav = getGravity();
-		Vector2 d = new Vector2(getX() / 10 - pos.x, getY() / 10 - pos.y);
-		// XXX: j'aime pas devoir faire ces conversions partout. Je veux une méthode qui me donne direct le bon nombre.
-		if(d.len() < getInfluenceRadius(mass)) {
-			float force = M * mass * grav / d.len2();
-//			System.out.println("f" + force);
-			d.nor();
-			d.mul(force);
-//			System.out.println(d);
-			return d;
-		} else {
-//			System.out.println("null");
-			return null;
-		}
+		float grav = getGravity(); /* XXX */
+		Vector2 d = new Vector2(getX() - pos.x, getY() - pos.y);
+		float force = mass * grav;
+		d.nor();
+		d.mul(force);
+		return d;
 	}
 
 }

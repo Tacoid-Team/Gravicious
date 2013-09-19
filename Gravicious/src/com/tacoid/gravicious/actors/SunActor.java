@@ -36,7 +36,7 @@ public class SunActor extends ElementActor{
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.Circle);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(this.getX(), this.getY(), sun.getInfluenceRadius(100));
+				shapeRenderer.circle(this.getX(), this.getY(), sun.getInfluenceRadius());
 			shapeRenderer.end();
 		batch.begin();
 	}

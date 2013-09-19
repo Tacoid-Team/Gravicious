@@ -61,16 +61,17 @@ public class GameMechanics implements ContactListener{
 				for (LevelElement l : level.getLevelElements()) {
 					if (l instanceof GravitationalElement) {
 						GravitationalElement g = (GravitationalElement) l;
-						
-						Vector2 d = g.computeAttraction(new Vector2(player.getX(), player.getY()),100);
-						if (d != null) {
-							player.getBody().applyForce(d, player.getBody().getWorldCenter());
+						Vector2 d = new Vector2(player.getX()-g.getX(), player.getY()-g.getY());
+						if(d.len() < g.getInfluenceRadius()) {
+							Vector2 f = g.computeAttraction(new Vector2(player.getX(), player.getY()),100);
+							if (f != null) {
+								player.getBody().applyForce(f, player.getBody().getWorldCenter());
+							}
 						}
 					}
 				}
 			} else {
 				playerAngle+=(0.01*playerDirection);
-				//System.out.println(playerAngle);
 				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(playerAngle)));
 				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(playerAngle)));
 

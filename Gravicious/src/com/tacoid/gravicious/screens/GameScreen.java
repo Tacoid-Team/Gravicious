@@ -1,13 +1,9 @@
 package com.tacoid.gravicious.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,7 +12,7 @@ import com.tacoid.gravicious.GameMechanics;
 import com.tacoid.gravicious.Gravicious;
 import com.tacoid.gravicious.Level;
 
-public class GameScreen extends AbstractGameScreen implements GestureListener {
+public class GameScreen extends AbstractGameScreen implements InputProcessor {
 
 	private static GameScreen instance = null;
 
@@ -55,9 +51,8 @@ public class GameScreen extends AbstractGameScreen implements GestureListener {
 		tableTL.setFillParent(true);
 		tableTL.left().top();
 		tableTL.add(new EditorButton());
-
-		InputMultiplexer im = new InputMultiplexer(new GestureDetector(this), stage); // Order matters here!
-		Gdx.input.setInputProcessor(im);
+		
+		//Gdx.input.setInputProcessor(this);
 	}
 
 	public void setLevel(Level level) {
@@ -104,60 +99,73 @@ public class GameScreen extends AbstractGameScreen implements GestureListener {
 
 	@Override
 	public void init() {
-		InputMultiplexer im = new InputMultiplexer(new GestureDetector(this), stage); // Order matters here!
-		Gdx.input.setInputProcessor(im);
+		//InputMultiplexer im = new InputMultiplexer(new GestureDetector(this), stage); // Order matters here!
+		//Gdx.input.setInputProcessor(im);
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
 	public void renderScreen(float delta) {
+
 		game.update(delta);
 		debugRenderer.render(game.getLevel().getWorld(), stage.getCamera().combined);
 	}
 
 	@Override
-	public boolean isEditor() {
+	public boolean keyDown(int keycode) {
+		if(keycode == Keys.DPAD_LEFT) {
+			game.setLeftPressed(true);
+		} else if(keycode == Keys.DPAD_RIGHT) {
+			game.setRightPressed(true);
+		}
 		return false;
 	}
 
 	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
+	public boolean keyUp(int keycode) {
+		if(keycode == Keys.DPAD_LEFT) {
+			game.setLeftPressed(false);
+		} else if(keycode == Keys.DPAD_RIGHT) {
+			game.setRightPressed(false);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean tap(float x, float y, int count, int button) {
+	public boolean touchDown(int x, int y, int pointer, int button) {		
+		return stage.touchDown(x, y, pointer, button);
+	}
+
+	@Override
+	public boolean touchDragged(int x, int y, int arg2) {
+		return stage.touchDragged(x, y, arg2);
+	}
+
+	@Override
+	public boolean touchUp(int x, int y, int pointer, int button) {
 		game.jump();
-		return false;
+		return stage.touchUp(x, y, pointer, button);
+	}
+	
+	@Override
+	public boolean mouseMoved(int x, int y) {
+		return stage.mouseMoved(x, y);
 	}
 
 	@Override
-	public boolean longPress(float x, float y) {
+	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
-		return false;
+		return stage.scrolled(amount);
 	}
 
 	@Override
-	public boolean fling(float velocityX, float velocityY, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean zoom(float initialDistance, float distance) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
-			Vector2 pointer1, Vector2 pointer2) {
+	public boolean isEditor() {
 		// TODO Auto-generated method stub
 		return false;
 	}

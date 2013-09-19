@@ -30,6 +30,8 @@ public class GameMechanics implements ContactListener{
 	private GameState gameState;
 	private PlayerState playerState;
 	private GravitationalElement walkedElement;
+	private boolean leftPressed = false;
+	private boolean rightPressed = false;
 
 
 	public GameMechanics() {
@@ -70,7 +72,14 @@ public class GameMechanics implements ContactListener{
 					}
 				}
 			} else {
-				player.setAngle(player.getAngle() + player.getAngularSpeed()*player.getDirection());
+				if(leftPressed) {
+					player.speedUp(1.0f);
+				} else if(rightPressed) {
+					player.speedUp(-1.0f);
+				} else { 
+					player.speedDown();
+				}
+				player.setAngle(player.getAngle() + player.getAngularSpeed());
 				player.setX(walkedElement.getX() + (float) ((walkedElement.getRadius()+20)*Math.cos(player.getAngle())));
 				player.setY(walkedElement.getY() + (float) ((walkedElement.getRadius()+20)*Math.sin(player.getAngle())));
 			}
@@ -79,8 +88,15 @@ public class GameMechanics implements ContactListener{
 
 	public void jump() {
 		if(playerState == PlayerState.WALKING) {
-			float verticalForce = (walkedElement.getInfluenceRadius()-walkedElement.getRadius())*walkedElement.getGravity()*0.012f;
-			float tangentForce = 10;
+			/* 
+			 * Max speed = 100% jump
+			 * No speed = 75% jump
+			 */
+			float tangentJumpRate =Math.abs(player.getAngularSpeed())/player.getMaxAngularSpeed();
+			float verticalJumpRate = 0.25f * (tangentJumpRate) + 0.75f;
+			System.out.println(tangentJumpRate);
+			float verticalForce = (walkedElement.getInfluenceRadius()-walkedElement.getRadius())*walkedElement.getGravity()*0.011f * verticalJumpRate;
+			float tangentForce = 100*tangentJumpRate;
 			
 			Vector2 d = new Vector2(player.getX()-walkedElement.getX(), player.getY()-walkedElement.getY());
 			d.nor();
@@ -88,7 +104,7 @@ public class GameMechanics implements ContactListener{
 			
 			Vector2 t = new Vector2(walkedElement.getY() - player.getY(), player.getX()-walkedElement.getX());
 			t.nor();
-			t.mul(player.getDirection());
+			t.mul(Math.signum(player.getAngularSpeed()));
 			t.mul(tangentForce);
 			d.add(t);
 
@@ -141,9 +157,9 @@ public class GameMechanics implements ContactListener{
 			
 			float dot = tangent.dot(playerBody.getLinearVelocity());
 			if(dot>0) {
-				player.setDirection(1.0f);
+				player.setAngularSpeed(Math.abs(player.getAngularSpeed()));
 			} else {
-				player.setDirection(-1.0f);
+				player.setAngularSpeed(-Math.abs(player.getAngularSpeed()));
 			}
 			
 			System.out.println("Angle="+player.getAngle());
@@ -169,5 +185,14 @@ public class GameMechanics implements ContactListener{
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void setLeftPressed( boolean pressed) {
+		this.leftPressed = pressed;
+	}
+	
+	public void setRightPressed( boolean pressed) {
+		this.rightPressed = pressed;
+	}
+	
 
 }

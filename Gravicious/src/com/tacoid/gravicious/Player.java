@@ -19,9 +19,8 @@ public class Player extends Actor {
 	
 	private float radius = 20;
 	
-	private final float maxAngularSpeed = 0.02f;
+	private final float maxAngularSpeed = 0.04f;
 	private float angle;
-	private float direction;
 	private float angularSpeed;
 
 	public Player(World world) {
@@ -42,8 +41,7 @@ public class Player extends Actor {
 		body.setUserData(this);
 		
 		setAngle(0.0f);
-		setDirection(1.0f);
-		setAngularSpeed(0.01f);
+		setAngularSpeed(0.0f);
 	}
 
 	@Override
@@ -91,19 +89,20 @@ public class Player extends Actor {
 		this.angle = angle;
 	}
 
-	public float getDirection() {
-		return direction;
-	}
-
-	public void setDirection(float direction) {
-		this.direction = direction;
-	}
-
 	public float getAngularSpeed() {
 		return angularSpeed;
 	}
 
 	public void setAngularSpeed(float angularSpeed) {
 		this.angularSpeed = angularSpeed;
+	}
+	
+	public void speedUp(float direction) {
+		angularSpeed += direction * 0.001f;
+		if(Math.abs(angularSpeed) > maxAngularSpeed)
+			angularSpeed = maxAngularSpeed * direction;
+	}
+	public void speedDown() {
+		angularSpeed *= 0.9f;
 	}
 }

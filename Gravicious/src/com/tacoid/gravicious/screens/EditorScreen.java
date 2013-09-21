@@ -51,6 +51,7 @@ public class EditorScreen extends AbstractGameScreen {
 		@Override
 		public void draw(SpriteBatch batch, float parentAlpha) {
 			if(selectedElement!=null) {
+				shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 				batch.end();
 				shapeRenderer.begin(ShapeType.FilledCircle);
 				shapeRenderer.setColor(shapeFillColor);
